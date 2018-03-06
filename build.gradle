@@ -1,0 +1,52 @@
+group 'github.organisation.scanner'
+version '1.0-SNAPSHOT'
+
+buildscript {
+
+    ext {
+        springBootVersion = '1.5.2.RELEASE'
+        jackson_version = '2.8.1'
+    }
+
+    repositories {
+        mavenCentral()
+        jcenter()
+        maven { url "https://plugins.gradle.org/m2/" }
+    }
+    dependencies {
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
+    }
+}
+
+repositories {
+    mavenCentral()
+    jcenter()
+    maven { url "https://repo.spring.io/release/" }
+    maven { url "http://repo.spring.io/libs-snapshot-local" }
+    maven { url "http://repo.spring.io/libs-milestone-local" }
+    maven { url "http://repo.spring.io/libs-release-local" }
+}
+
+apply plugin: 'java'
+apply plugin: 'org.springframework.boot'
+
+sourceCompatibility = 1.8
+
+configurations.all {
+    exclude group: 'org.slf4j', module: 'slf4j-log4j12'
+}
+
+dependencies {
+    compile("org.springframework.boot:spring-boot-starter-web")
+    compile "com.fasterxml.jackson.core:jackson-core:$jackson_version"
+    compile "com.fasterxml.jackson.core:jackson-annotations:$jackson_version"
+    compile "com.fasterxml.jackson.core:jackson-databind:$jackson_version"
+    compile group: 'org.codehaus.janino', name: 'janino', version: '3.0.8'
+    compile (group: 'org.apache.spark', name: 'spark-core_2.11', version: '2.3.0') {
+        //exclude group: 'com.fasterxml.jackson.module'
+    }
+    compile (group: 'org.apache.spark', name: 'spark-sql_2.11', version: '2.3.0') {
+        //exclude group: 'com.fasterxml.jackson.core'
+    }
+    testCompile group: 'junit', name: 'junit', version: '4.12'
+}
